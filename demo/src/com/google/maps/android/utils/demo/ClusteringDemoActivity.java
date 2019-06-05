@@ -16,10 +16,18 @@
 
 package com.google.maps.android.utils.demo;
 
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.utils.demo.model.MyItem;
 
@@ -40,6 +48,36 @@ public class ClusteringDemoActivity extends BaseDemoActivity {
 
         mClusterManager = new ClusterManager<MyItem>(this, getMap());
         getMap().setOnCameraIdleListener(mClusterManager);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(51.509865, -0.118092))
+                .title("This is my title")
+                .snippet("and snippet")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        getMap().addMarker(markerOptions);
+
+        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
+            @Override
+            public boolean onClusterItemClick(MyItem item) {
+                Log.i("POLLAS", "ITEM");
+                return true;
+            }
+        });
+
+        mClusterManager.setNonClusteredItemClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.i("POLLAS", "Non clustered!");
+                return false;
+            }
+        });
+        mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
+            @Override
+            public boolean onClusterClick(Cluster<MyItem> cluster) {
+                Log.i("POLLAS", "CLUSTER");
+                return true;
+            }
+        });
+        getMap().setOnMarkerClickListener(mClusterManager);
 
         try {
             readItems();

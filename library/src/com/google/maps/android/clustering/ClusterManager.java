@@ -284,6 +284,16 @@ public class ClusterManager<T extends ClusterItem> implements
         mRenderer.setOnClusterItemClickListener(listener);
     }
 
+
+    /**
+     * Sets a callback for markers that are not included in the ClusterManager (e.g. marker indicating
+     * users position)
+     */
+    public void setNonClusteredItemClickListener(GoogleMap.OnMarkerClickListener listener){
+        getMarkerManager().setNonClusterItemClickListener(listener);
+    }
+
+
     /**
      * Sets a callback that's invoked when an individual ClusterItem's Info Window is tapped. Note: For this
      * listener to function, the ClusterManager must be added as a info window click listener to the map.

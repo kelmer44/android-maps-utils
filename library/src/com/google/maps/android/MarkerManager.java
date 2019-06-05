@@ -54,6 +54,9 @@ public class MarkerManager implements
         return new Collection();
     }
 
+
+    private GoogleMap.OnMarkerClickListener mNonClusterItemClickListener = null;
+
     /**
      * Create a new named collection, which can later be looked up by {@link #getCollection(String)}
      *
@@ -109,6 +112,9 @@ public class MarkerManager implements
         if (collection != null && collection.mMarkerClickListener != null) {
             return collection.mMarkerClickListener.onMarkerClick(marker);
         }
+        if (mNonClusterItemClickListener != null) {
+            return mNonClusterItemClickListener.onMarkerClick(marker);
+        }
         return false;
     }
 
@@ -145,6 +151,14 @@ public class MarkerManager implements
     public boolean remove(Marker marker) {
         Collection collection = mAllMarkers.get(marker);
         return collection != null && collection.remove(marker);
+    }
+
+    public GoogleMap.OnMarkerClickListener getNonClusterItemClickListener() {
+        return mNonClusterItemClickListener;
+    }
+
+    public void setNonClusterItemClickListener(GoogleMap.OnMarkerClickListener mNonClusterItemClickListener) {
+        this.mNonClusterItemClickListener = mNonClusterItemClickListener;
     }
 
     public class Collection {
